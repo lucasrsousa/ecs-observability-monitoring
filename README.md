@@ -22,7 +22,7 @@ Este projeto consistiu no planejamento e implementação de uma solução comple
 
 O objetivo era garantir visibilidade completa sobre métricas, logs e traces, além de configurar canais de alerta para diferentes equipes operacionais, utilizando ferramentas modernas e escaláveis.
 
-![Diagrama do projeto](arquitetura-monitoramento.png)
+![Diagrama do projeto](assets/aws-bedrock-diagram.png)
 
 ### Desafios:
 
@@ -34,19 +34,21 @@ Escalabilidade e simplicidade na manutenção da stack de monitoramento.
 
 ### Solução Implementada:
 
-Implementei uma stack de observabilidade dividida em três camadas principais:
+#### Implementei uma stack de observabilidade dividida em três camadas principais:
 
-Coleta:
+#### Coleta:
 
 As aplicações Spring Boot expõem métricas, logs e traces.
 OpenTelemetry atua como agente unificador para rastreamento distribuído e os traces são armazenados no Grafana Tempo.
 Prometheus coleta métricas de performance do JVM.
 Logs são enviados via Cloudwatch e Data Firehose para o Grafana Alloy e por fim ao Grafana Loki.
-Visualização e Análise:
+
+#### Visualização e Análise:
 
 Todas as informações são centralizadas no Grafana, com dashboards customizados.
 Painéis específicos por serviço e por tipo de dado (métricas, logs e traces).
 Visualização completa da jornada de requisições entre microserviços.
-Alertas:
+
+#### Alertas:
 
 Alertas configurados no Grafana com integração direta para Microsoft Teams e e-mails corporativos, dependendo do time e criticidade do incidente.
