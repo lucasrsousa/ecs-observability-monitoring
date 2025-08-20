@@ -1,0 +1,47 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:  
+  batch:
+    timeout: 1s
+    send_batch_size: 1024
+    send_batch_max_size: 2048
+
+  tail_sampling:
+    decision_wait: 10s
+    num_traces: 50000
+    policies:      
+      - name: error_policy
+        type: status_code
+        status_code:
+          status_codes: [ERROR]      
+      - name: success_policy
+        type: and
+        and:
+          and_sub_policy:
+            - name: success_status
+              type: status_code
+              status_code:
+                status_codes: [OK, UNSET]
+            - name: probabilistic
+              type: probabilistic
+              probabilistic:
+                sampling_percentage: 10
+
+exporters:
+  otlp:
+    endpoint: tempo:4317
+    tls:
+      insecure: true  
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch, tail_sampling]
+      exporters: [otlp]

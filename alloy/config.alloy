@@ -1,0 +1,42 @@
+loki.source.awsfirehose "firehose_logs" {
+  http {
+    listen_address = "0.0.0.0"
+    listen_port    = PORT
+    
+    // Timeouts para stability
+    server_read_timeout  = "30s"
+    server_write_timeout = "30s"
+  }
+  
+  // Chave de acesso opcional para segurança adicionada no Data Firehose
+  access_key = "CHAVE_KEY"
+  
+  forward_to = [loki.write.local.receiver]
+
+  relabel_rules = loki.relabel.logging_origin.rules
+}
+
+loki.relabel "logging_origin" {
+  rule {
+    action = "replace"
+    source_labels = ["__aws_cw_log_group"]
+    target_label = "log_group"
+  }
+  rule {
+    action = "replace"
+    source_labels = ["__aws_cw_log_stream"]
+    target_label = "log_stream"
+  }
+  forward_to = []
+}
+
+// Escrita para o Loki local
+loki.write "local" {
+  endpoint {
+    url = "http://loki:3100/loki/api/v1/push"
+  }
+}
+
+logging {
+  level = "info"
+}
