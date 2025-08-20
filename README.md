@@ -22,7 +22,7 @@ Este projeto consistiu no planejamento e implementação de uma solução comple
 
 O objetivo era garantir visibilidade completa sobre métricas, logs e traces, além de configurar canais de alerta para diferentes equipes operacionais, utilizando ferramentas modernas e escaláveis.
 
-![Diagrama do projeto](assets/aws-bedrock-diagram.png)
+![Diagrama do projeto](arquitetura-monitoramento.png)
 
 ### Desafios:
 
